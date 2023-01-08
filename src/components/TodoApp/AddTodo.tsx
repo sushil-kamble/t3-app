@@ -8,7 +8,15 @@ function AddTodo({
 }) {
     const [value, setValue] = useState('');
     const { data: sessionData } = useSession();
+
+    // LOADING STATE
+    const [createTodoLoading, setCreateTodoLoading] = useState(false);
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        if (createTodoLoading) {
+            return;
+        }
+        setCreateTodoLoading(true);
         e.preventDefault();
         if (!sessionData) {
             signIn();
@@ -17,6 +25,7 @@ function AddTodo({
         }
         await createTodo(value);
         setValue('');
+        setCreateTodoLoading(false);
     };
     return (
         <form
@@ -31,7 +40,7 @@ function AddTodo({
                 onChange={(e) => setValue(e.target.value)}
             />
             <button className="rounded bg-sky-600 px-4 py-2 text-white">
-                {sessionData ? 'Add' : 'Login'}
+                {createTodoLoading ? 'Adding' : sessionData ? 'Add' : 'Login'}
             </button>
         </form>
     );

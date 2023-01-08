@@ -4,21 +4,21 @@ import type { AppRouter } from '../../server/trpc/router/_app';
 import Todo from './Todo';
 
 const Todos = ({
-    isLoading,
+    initialLoading,
     error,
     data,
     toggleTodo,
     updateTodo,
     deleteTodo,
 }: {
-    isLoading: boolean;
+    initialLoading: boolean;
     error: TRPCClientErrorLike<AppRouter> | null;
     data: TodoType[] | undefined;
     updateTodo: (id: number, title: string) => Promise<void>;
     toggleTodo: (id: number) => Promise<void>;
     deleteTodo: (id: number) => Promise<void>;
 }) => {
-    if (isLoading) {
+    if (initialLoading) {
         return <div>Loading...</div>;
     }
     if (error) {

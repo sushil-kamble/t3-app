@@ -17,13 +17,44 @@ const Todo = ({
         return todo.title === inputValue;
     }, [todo.title, inputValue]);
 
-    const handleEditClick = async () => {
+    // LOADING STATES
+    const [toogleTodoLoading, setToggleTodoLoading] = useState(false);
+    const [updateTodoLoading, setUpdateTodoLoading] = useState(false);
+    const [deleteTodoLoading, setDeleteTodoLoading] = useState(false);
+
+    // TOGGLE TODO
+    const handleToggleTodo = async () => {
+        if (toogleTodoLoading) {
+            return;
+        }
+        setToggleTodoLoading(true);
+        await toggleTodo(todo.id);
+        setToggleTodoLoading(false);
+    };
+
+    // UPDATE TODO
+    const handleUpdateTodo = async () => {
+        if (updateTodoLoading) {
+            return;
+        }
         if (!isTodoTitleSameAsInputValue) {
+            setUpdateTodoLoading(true);
             await updateTodo(todo.id, inputValue);
             setEditTodo(false);
+            setUpdateTodoLoading(false);
             return;
         }
         setEditTodo((prev) => !prev);
+    };
+
+    // DELETE TODO
+    const handleDeleteTodo = async () => {
+        if (deleteTodoLoading) {
+            return;
+        }
+        setDeleteTodoLoading(true);
+        await deleteTodo(todo.id);
+        setDeleteTodoLoading(false);
     };
 
     return (
@@ -39,7 +70,7 @@ const Todo = ({
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyUp={(e) => {
                             if (e.key === 'Enter') {
-                                handleEditClick();
+                                handleUpdateTodo();
                             }
                         }}
                         tabIndex={0}
@@ -51,23 +82,25 @@ const Todo = ({
             <div className="flex items-center gap-4">
                 <button
                     className="rounded-md bg-sky-400 px-4 py-1 text-white shadow-md"
-                    onClick={handleEditClick}
+                    onClick={handleUpdateTodo}
                 >
-                    {editTodo
+                    {updateTodoLoading
+                        ? 'Saving'
+                        : editTodo
                         ? `${isTodoTitleSameAsInputValue ? 'Cancel' : 'Save'}`
                         : 'Edit'}
                 </button>
                 <button
-                    className="rounded-md  px-4 py-1  shadow-md"
-                    onClick={() => toggleTodo(todo.id)}
+                    className="rounded-md  px-4 py-1 shadow-md"
+                    onClick={handleToggleTodo}
                 >
-                    {todo.completed ? '✅' : '❌'}
+                    {toogleTodoLoading ? '🕣' : todo.completed ? '✅' : '❌'}
                 </button>
                 <button
-                    className="rounded-md  px-4 py-1  shadow-md"
-                    onClick={() => deleteTodo(todo.id)}
+                    className="rounded-md  px-4 py-1 shadow-md"
+                    onClick={handleDeleteTodo}
                 >
-                    🗑️
+                    {deleteTodoLoading ? '🕣' : '🗑️'}
                 </button>
             </div>
         </div>

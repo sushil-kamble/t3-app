@@ -4,7 +4,12 @@ import AddTodo from './AddTodo';
 import { signIn, useSession } from 'next-auth/react';
 
 function Main() {
-    const { isLoading, data, refetch, error } = trpc.todo.getAll.useQuery();
+    const {
+        isLoading: initialLoading,
+        data,
+        refetch,
+        error,
+    } = trpc.todo.getAll.useQuery();
     const { data: sessionData } = useSession();
     const createMutation = trpc.todo.create.useMutation();
     const toggleMutation = trpc.todo.toggle.useMutation();
@@ -38,7 +43,7 @@ function Main() {
                 {sessionData ? (
                     // LOGGED IN VIEW
                     <Todos
-                        isLoading={isLoading}
+                        initialLoading={initialLoading}
                         error={error}
                         data={data}
                         toggleTodo={toggleTodo}
