@@ -1,9 +1,11 @@
 import Todos from './Todos';
 import { trpc } from '../../utils/trpc';
 import AddTodo from './AddTodo';
+import { signIn, useSession } from 'next-auth/react';
 
 function Main() {
     const { isLoading, data, refetch, error } = trpc.todo.getAll.useQuery();
+    const { data: sessionData } = useSession();
     const createMutation = trpc.todo.create.useMutation();
     const toggleMutation = trpc.todo.toggle.useMutation();
     const updateMutation = trpc.todo.update.useMutation();
@@ -33,14 +35,27 @@ function Main() {
 
             {/* TODO ITEMS */}
             <div className="mt-2 grow overflow-y-auto rounded bg-white p-2">
-                <Todos
-                    isLoading={isLoading}
-                    error={error}
-                    data={data}
-                    toggleTodo={toggleTodo}
-                    updateTodo={updateTodo}
-                    deleteTodo={deleteTodo}
-                />
+                {sessionData ? (
+                    // LOGGED IN VIEW
+                    <Todos
+                        isLoading={isLoading}
+                        error={error}
+                        data={data}
+                        toggleTodo={toggleTodo}
+                        updateTodo={updateTodo}
+                        deleteTodo={deleteTodo}
+                    />
+                ) : (
+                    // LOGGED OUT VIEW
+                    <>
+                        <button
+                            onClick={() => signIn()}
+                            className="my-auto w-full rounded-lg bg-sky-600 py-2 text-white"
+                        >
+                            Login
+                        </button>
+                    </>
+                )}
             </div>
             {/* TODO ITEMS */}
         </div>

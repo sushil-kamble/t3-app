@@ -1,3 +1,4 @@
+import { signIn, useSession } from 'next-auth/react';
 import { useState } from 'react';
 
 function AddTodo({
@@ -6,8 +7,14 @@ function AddTodo({
     createTodo: (title: string) => Promise<void>;
 }) {
     const [value, setValue] = useState('');
+    const { data: sessionData } = useSession();
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!sessionData) {
+            signIn();
+            setValue('');
+            return;
+        }
         await createTodo(value);
         setValue('');
     };
@@ -24,7 +31,7 @@ function AddTodo({
                 onChange={(e) => setValue(e.target.value)}
             />
             <button className="rounded bg-sky-600 px-4 py-2 text-white">
-                Add
+                {sessionData ? 'Add' : 'Login'}
             </button>
         </form>
     );
