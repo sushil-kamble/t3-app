@@ -33,7 +33,7 @@ function Main() {
     };
 
     return (
-        <div className="mx-auto flex h-[80vh] w-full flex-col rounded-xl bg-sky-100 p-4 shadow-sm lg:w-[90vw] xl:w-[50vw]">
+        <div className="mx-auto flex h-[80vh] w-full flex-col rounded-xl bg-sky-100 shadow-sm md:p-4 lg:w-[90vw] xl:w-[50vw]">
             {/* TODO INPUT */}
             <AddTodo createTodo={createTodo} />
             {/* TODO INPUT */}
@@ -55,7 +55,7 @@ function Main() {
                     <>
                         <button
                             onClick={() => signIn()}
-                            className="my-auto w-full rounded-lg bg-sky-600 py-2 text-white"
+                            className="my-auto w-full break-all rounded-lg bg-sky-600 py-2 text-white"
                         >
                             Login
                         </button>
