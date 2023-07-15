@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import Main from '../../components/TodoApp/Main';
 
 function Todos() {
@@ -9,6 +10,11 @@ function Todos() {
             <hr className="h-1 border border-r-sky-400 bg-sky-400" />
             <section className="grow rounded-md border bg-slate-100 p-3">
                 <Main />
+                <div className="flex justify-center">
+                    <Link href="/" className="t-btn">
+                        Go Back
+                    </Link>
+                </div>
             </section>
         </div>
     );
